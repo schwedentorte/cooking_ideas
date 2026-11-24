@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Weekly Thali</title>
+  <meta name="description" content="Five Indian vegetarian dishes to cook this week, picked from your own list.">
+  <meta name="theme-color" content="#b4531a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Thali">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Weekly Thali</h1>
+      <p id="weekLabel" class="sub"></p>
+    </div>
+    <div class="actions">
+      <button id="refreshBtn" class="icon-btn" aria-label="Refresh" title="Refresh">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="settingsBtn" class="icon-btn" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+
+  <main>
+    <!-- First-run / settings -->
+    <section id="setupView" hidden>
+      <h2>Connect your sheet</h2>
+      <p class="muted">Paste the web app URL and token from the Apps Script attached to your Google Sheet (see the setup guide).</p>
+      <form id="setupForm">
+        <label>Web app URL
+          <input id="urlInput" type="url" required placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+        </label>
+        <label>Token
+          <input id="tokenInput" type="text" required placeholder="from setup()" autocomplete="off" spellcheck="false">
+        </label>
+        <div class="row">
+          <button type="submit" class="primary">Save</button>
+          <button type="button" id="cancelSetup" class="ghost" hidden>Cancel</button>
+        </div>
+      </form>
+      <div id="setupExtra" hidden>
+        <hr>
+        <button type="button" id="regenBtn" class="ghost">Pick a new set for this week</button>
+        <p class="muted small">Replaces all five dishes. Dishes you've marked cooked stay marked in the sheet.</p>
+      </div>
+    </section>
+
+    <!-- Week view -->
+    <section id="weekView" hidden>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tabDishes" aria-selected="true" class="tab">Dishes</button>
+        <button role="tab" id="tabShop" aria-selected="false" class="tab">Shopping list</button>
+      </div>
+
+      <div id="dishesPanel">
+        <ol id="dishList" class="dishes"></ol>
+        <p id="nextNote" class="muted small center"></p>
+      </div>
+
+      <div id="shopPanel" hidden>
+        <h2 class="section-h">Vegetables</h2>
+        <ul id="vegList" class="checklist"></ul>
+        <h2 class="section-h">Other ingredients</h2>
+        <ul id="otherList" class="checklist"></ul>
+        <h2 class="section-h">Spices to check</h2>
+        <p id="spiceList" class="spices"></p>
+        <div class="row center">
+          <button id="shareList" class="ghost">Share list</button>
+          <button id="clearTicks" class="ghost">Clear ticks</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="dishTpl">
+    <li class="dish">
+      <div class="dish-head">
+        <span class="num"></span>
+        <div class="dish-title">
+          <h3 class="name"></h3>
+          <p class="meta"></p>
+        </div>
+        <span class="pill cat"></span>
+      </div>
+      <ul class="chips"></ul>
+      <details>
+        <summary>Ingredients &amp; spices</summary>
+        <p><strong>Also need:</strong> <span class="other"></span></p>
+        <p><strong>Spices:</strong> <span class="spice"></span></p>
+      </details>
+      <div class="dish-foot">
+        <span class="last muted small"></span>
+        <div class="row">
+          <button class="ghost swap">Swap</button>
+          <button class="cook">Cooked</button>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
